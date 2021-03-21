@@ -44,18 +44,18 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Main extends Application {
-	private static double speed = 0.3; // default speed
+	private static double speed = 0.3; 
 	private Scene game;
 	private Scene menu;
 	private Scene level;
 	private Scene board;
 
-	private Stage theStage; // helpful stages
+	private Stage theStage; 
 	private Stage stage;
 
 	private String typedText;
 
-	private Button btn1; // menu buttons
+	private Button btn1; 
 	private Button btn2;
 	private Button btn3;
 	private Button btn4;
@@ -64,37 +64,35 @@ public class Main extends Application {
 	private TextField field;
 	private Button backButton;
 
-	private int score = 0; // starting score
+	private int score = 0; 
 
-	private Button easy; // levels
+	private Button easy; 
 	private Button medium;
 	private Button hard;
 
-	private Label scoreLab; // label that indicates score
-	private Label levelLab; // level that indicates actual level;
+	private Label scoreLab; 
+	private Label levelLab; 
 
 	private String css;
-	// the
-	// css
+	
 
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT
 	}
 
-	private Direction direction = Direction.RIGHT; // default direction that the
-													// snake goes
+	private Direction direction = Direction.RIGHT;
+
 	private boolean moved = false;
 	private boolean running = false;
 
 	private Timeline timeline = new Timeline();
 
-	private ObservableList<Node> snake; // snake list
-	private ObservableList<Player> player = FXCollections.observableArrayList(); // players
-																					// score
-																					// list
+	private ObservableList<Node> snake;
+	private ObservableList<Player> player = FXCollections.observableArrayList();
+																					 
 
-	private Parent createMenu() throws IOException { // creating the starting
-														// menu
+	private Parent createMenu() throws IOException {
+							
 		Parent root = FXMLLoader.load(getClass().getResource("/fxml/Menu.fxml"));
 
 		Pane root1 = (Pane) root.lookup("#menu");
@@ -112,18 +110,17 @@ public class Main extends Application {
 		btn4 = (Button) root.lookup("#btn4");
 		btn4.getStyleClass().add("button-menu");
 
-		btn1.setOnAction(e -> ButtonClicked(e)); // if button clicked goes to
-													// function buttonclicked
+		btn1.setOnAction(e -> ButtonClicked(e));
 		btn2.setOnAction(e -> ButtonClicked(e));
 		btn3.setOnAction(e -> ButtonClicked(e));
 		btn4.setOnAction(e -> ButtonClicked(e));
 
-		load(); // loading saved leaderboard
+		load(); 
 
 		return root1;
 	}
 
-	private Parent createLevel() throws IOException { // creating level menu
+	private Parent createLevel() throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/fxml/Level.fxml"));
 
 		Pane root1 = (Pane) root.lookup("#menu");
@@ -138,14 +135,14 @@ public class Main extends Application {
 		hard = (Button) root.lookup("#hard");
 		hard.getStyleClass().add("button-menu");
 
-		easy.setOnAction(e -> ButtonClicked(e)); // the same as in the menu
+		easy.setOnAction(e -> ButtonClicked(e));
 		medium.setOnAction(e -> ButtonClicked(e));
 		hard.setOnAction(e -> ButtonClicked(e));
 
 		return root1;
 	}
 
-	public void gameStarting() throws IOException { // setting the game scene
+	public void gameStarting() throws IOException {
 		game = new Scene(create());
 
 		game.getStylesheets().add(css);
@@ -155,15 +152,14 @@ public class Main extends Application {
 		startGame();
 	}
 
-	public void levelStarting() throws IOException { // setting the level menu
+	public void levelStarting() throws IOException {
 		level = new Scene(createLevel());
 
 		level.getStylesheets().add(css);
 		theStage.setScene(level);
 	}
 
-	public Parent boardStarting() throws IOException { // setting and creating
-														// leaderboard
+	public Parent boardStarting() throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/fxml/LeaderBoard.fxml"));
 
 		Pane root1 = (Pane) root.lookup("#pane");
@@ -180,8 +176,7 @@ public class Main extends Application {
 		table.setMaxWidth(599);
 
 		TableColumn<Player, String> name = new TableColumn<>("Name");
-		name.setMinWidth(300); // min width of col to be sure that they will fit
-								// properly
+		name.setMinWidth(300); 
 
 		name.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -190,7 +185,6 @@ public class Main extends Application {
 		score.setMinWidth(300);
 		score.setCellValueFactory(new PropertyValueFactory<>("score"));
 
-		// Sorting the players score list using collections sort and comaparator
 		Collections.sort((List) player, new Comparator<Player>() {
 			public int compare(Player c1, Player c2) {
 				if (c1.getScore() > c2.getScore())
@@ -201,10 +195,10 @@ public class Main extends Application {
 			}
 		});
 
-		table.setItems(player); // setting the items in the table
+		table.setItems(player);
 		table.getColumns().addAll(name, score);
 
-		root1.getChildren().add(table); // setting the table in root
+		root1.getChildren().add(table);
 
 		return root1;
 
@@ -212,7 +206,7 @@ public class Main extends Application {
 
 	public void ButtonClicked(ActionEvent e) {
 
-		if (e.getSource() == btn1) { // btn game start
+		if (e.getSource() == btn1) {
 
 			try {
 				gameStarting();
@@ -222,7 +216,7 @@ public class Main extends Application {
 
 		}
 
-		if (e.getSource() == btn2) { // btn leaderboard load
+		if (e.getSource() == btn2) {
 			try {
 				board = new Scene(boardStarting());
 				board.getStylesheets().add(css);
@@ -232,7 +226,7 @@ public class Main extends Application {
 			theStage.setScene(board);
 		}
 
-		if (e.getSource() == btn4) { // btn level menu load
+		if (e.getSource() == btn4) {
 			try {
 				levelStarting();
 			} catch (IOException e1) {
@@ -240,7 +234,7 @@ public class Main extends Application {
 			}
 		}
 
-		if (e.getSource() == btn3) { // exit btn
+		if (e.getSource() == btn3) {
 			write(player);
 			System.exit(0);
 		}
@@ -263,9 +257,7 @@ public class Main extends Application {
 			theStage.setScene(menu);
 		}
 
-		if (e.getSource() == buttonOk) { // button that ok displayed when you
-											// end the game you can write here
-											// your name
+		if (e.getSource() == buttonOk) {			
 			typedText = field.getText();
 
 			player.add(new Player(typedText, score));
@@ -283,24 +275,21 @@ public class Main extends Application {
 
 	}
 
-	private Parent create() throws IOException { // main function that creates
-													// game
+	private Parent create() throws IOException {
+		
 		Parent root1 = FXMLLoader.load(getClass().getResource("/fxml/SnakeScreen.fxml"));
 
 		Pane root2 = (Pane) root1.lookup("#paneOut");
-		root2.getStyleClass().add("back"); // background style for paneOut which
-											// is the pane behind the pane that
-											// we play on
+		root2.getStyleClass().add("back");
 
-		Pane root = (Pane) root2.lookup("#panePlay"); // pane on which the snake
-														// is going
+		Pane root = (Pane) root2.lookup("#panePlay"); 
 
 		root.getStyleClass().add("playBack");
-		Canvas canvas = (Canvas) root2.lookup("#canvas"); // canvas for the net
+		Canvas canvas = (Canvas) root2.lookup("#canvas");
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.setStroke(Color.DARKGRAY);
-		// setting the net
+
 		for (int x = 0; x <= SnakeConfiguration.getWidth(); x += SnakeConfiguration.getBlockSize()) {
 
 			for (int y = 0; y <= SnakeConfiguration.getHeight(); y += SnakeConfiguration.getBlockSize())
@@ -308,7 +297,7 @@ public class Main extends Application {
 
 		}
 
-		timeline = new Timeline(); // starting animation
+		timeline = new Timeline();
 		root.setPrefSize(SnakeConfiguration.getWidth(), SnakeConfiguration.getHeight());
 		score = 0; // setting score for 0
 
@@ -317,7 +306,7 @@ public class Main extends Application {
 
 		Rectangle food = Game.newFood();
 
-		scoreLab = (Label) root1.lookup("#score"); // score label
+		scoreLab = (Label) root1.lookup("#score");
 		scoreLab.setText("" + score);
 
 		levelLab = (Label) root1.lookup("#level");
@@ -337,17 +326,7 @@ public class Main extends Application {
 
 			boolean toRemove = snake.size() > 1;
 
-			Node tail = toRemove ? snake.remove(snake.size() - 1) : snake.get(0); // if
-																					// toRemove
-																					// is
-																					// true
-																					// its
-																					// first
-																					// one
-																					// if
-																					// not
-																					// the
-																					// second
+			Node tail = toRemove ? snake.remove(snake.size() - 1) : snake.get(0); 
 
 			double tailX = tail.getTranslateX();
 			double tailY = tail.getTranslateY();
@@ -393,7 +372,7 @@ public class Main extends Application {
 			Game.tailConditions(tail);
 
 			if (Game.checkConditions(tail, food)) {
-				// this checks if the food is under the snake
+				
 				ListIterator<Node> it = snake.listIterator();
 
 				while (it.hasNext()) {
@@ -411,12 +390,9 @@ public class Main extends Application {
 					}
 				}
 
-				// food.setTranslateX(Game.randXY(SnakeConfiguration.getWidth()));
-				// food.setTranslateY(Game.randXY(SnakeConfiguration.getHeight()));
 
 				Rectangle rect = Game.grow(tailX, tailY);
-				rect.getStyleClass().add("snake"); // setting the score if the
-													// food was eaten
+				rect.getStyleClass().add("snake");
 				score += 10;
 				scoreLab.setText("" + score);
 
@@ -432,11 +408,10 @@ public class Main extends Application {
 
 	}
 
-	private void stoppingGame() throws IOException { // function stopping the
-														// game
+	private void stoppingGame() throws IOException {
 		stopGame();
 		theStage.setScene(menu);
-		stage = new Stage(); // new stage for pop-up window
+		stage = new Stage();
 		stage.setResizable(false);
 		stage.setTitle("Koniec gry");
 
@@ -456,26 +431,22 @@ public class Main extends Application {
 		
 	}
 
-	private void stopGame() { // 2nd function stopping
+	private void stopGame() {
 		running = false;
 		timeline.stop();
 		snake.clear();
 
 	}
 
-	private void startGame() { // starting the game
+	private void startGame() {
 
 		direction = Direction.RIGHT;
 
 		Rectangle head = new Rectangle(SnakeConfiguration.getBlockSize(), SnakeConfiguration.getBlockSize());
 
-		head.setTranslateY(Game.randXY(SnakeConfiguration.getHeight())); // the
-																			// random
-																			// position
-																			// for
-																			// height
+		head.setTranslateY(Game.randXY(SnakeConfiguration.getHeight()));
 
-		head.setFill(Color.FORESTGREEN); // head color
+		head.setFill(Color.FORESTGREEN);
 		head.getStyleClass().add("snake");
 
 		snake.add(head);
@@ -519,11 +490,11 @@ public class Main extends Application {
 
 	}
 
-	private void load() { // loading the saved scores
+	private void load() {
 
 		try {
-			FileInputStream fis = new FileInputStream("PlayerSaveFile.ser"); // using
-																				// serialization
+			FileInputStream fis = new FileInputStream("PlayerSaveFile.ser");
+																	
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			List<Player> list = (List<Player>) ois.readObject();
 
@@ -541,8 +512,7 @@ public class Main extends Application {
 
 	}
 
-	public void write(ObservableList<Player> list) { // saving the scores to
-														// file
+	public void write(ObservableList<Player> list) {
 
 		try {
 
@@ -565,7 +535,7 @@ public class Main extends Application {
 		theStage = primaryStage;
 		css = this.getClass().getResource("/css/style.bss").toExternalForm();
 
-		menu = new Scene(createMenu()); // first scene menu
+		menu = new Scene(createMenu());
 		menu.getStylesheets().add(css);
 
 		primaryStage.setTitle("Snake");
